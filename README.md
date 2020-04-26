@@ -74,41 +74,70 @@ services:
       - db
 ```
 
-6.rails new のコマンドを web コンテナ上で実行して Rails のファイル群を生成する。  
- \$ docker-compose run web bundle exec rails new . --force --database=mysql
+6.rails new のコマンドを web コンテナ上で実行して Rails のファイル群を生成する。
 
-7.Rails のファイル群が rails new コマンドによって出来上がったので build 　する。  
- \$ docker-compose build
+```
+$ docker-compose run web bundle exec rails new . --force --database=mysql
+```
+
+7.Rails のファイル群が rails new コマンドによって出来上がったので build 　する。
+
+```
+$ docker-compose build
+```
 
 8.DB ホスト名変更  
  config/database.yml の host の部分を db に置き換える。
 
-9.build 後に docker-compose up する。  
- \$ docker-compose up
+9.build 後に docker-compose up する。
 
-10.DB コンテナで mysql クライアント起動  
- \$ docker-compose exec db bash
+```
+$ docker-compose up
+```
 
-11.db コンテナの bash を起動後に mysql コマンドで接続する。  
- mysql -u root
+10.DB コンテナで mysql クライアント起動
 
-12.認証方式変更 SQL  
- mysql> select User,Host,plugin from mysql.user;
+```
+$ docker-compose exec db bash
+```
+
+11.db コンテナの bash を起動後に mysql コマンドで接続する。
+
+```
+mysql -u root
+```
+
+12.認証方式変更 SQL
+
+```
+mysql> select User,Host,plugin from mysql.user;
+```
 
 全て caching_sha2_password に設定されています。これを mysql_native_password に変更する。
 
+```
 mysql> ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '';
+```
 
-13.DB が作成されていないよ、というメッセージが出るので db:prepare でテーブルを作成する。  
-\$ docker-compose exec web bundle exec rails db:prepare
+13.DB が作成されていないよ、というメッセージが出るので db:prepare でテーブルを作成する。
+
+```
+$ docker-compose exec web bundle exec rails db:prepare
+```
 
 これで Rails のホーム画面が表示されるようになる。
 
-14.Vue.js の導入  
-\$ docker-compose run web rails webpacker:install:vue
+14.Vue.js の導入
 
-15.Vue.js ファイルのコンパイル  
-\$ docker-compose run web bin/webpack
+```
+$ docker-compose run web rails webpacker:install:vue
+```
+
+15.Vue.js ファイルのコンパイル
+
+```
+$ docker-compose run web bin/webpack
+```
 
 ## 参考文献
 
