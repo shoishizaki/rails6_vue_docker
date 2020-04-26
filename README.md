@@ -86,8 +86,23 @@ $ docker-compose run web bundle exec rails new . --force --database=mysql
 $ docker-compose build
 ```
 
-8.DB ホスト名変更  
- config/database.yml の host の部分を db に置き換える。
+8.DB ホスト名変更（config/database.yml の host の部分を db に置き換える。）
+
+```
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: root
+  password:
+  host: db
+development:
+  <<: *default
+  database: app_development
+test:
+  <<: *default
+  database: app_test
+```
 
 9.build 後に docker-compose up する。
 
